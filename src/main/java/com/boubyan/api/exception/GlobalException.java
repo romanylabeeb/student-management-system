@@ -21,6 +21,16 @@ public class GlobalException {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
+    @ExceptionHandler(CourseException.class)
+    public ResponseEntity<String> handleCourseNotFoundException(CourseException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(StudentException.class)
+    public ResponseEntity<String> handleStudentNotFoundException(StudentException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -39,7 +49,6 @@ public class GlobalException {
     public ResponseEntity<ErrorResponse> handleConstraintViolationException(ConstraintViolationException ex) {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, "Missing required fields or invalid values.");
     }
-
 
 
     private ResponseEntity<ErrorResponse> buildResponseEntity(HttpStatus status, String message) {
