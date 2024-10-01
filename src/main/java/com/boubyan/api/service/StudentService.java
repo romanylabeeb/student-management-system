@@ -1,8 +1,7 @@
 package com.boubyan.api.service;
 
-import com.boubyan.api.dao.StudentRepository;
+import com.boubyan.api.dao.StudentDao;
 import com.boubyan.api.dto.StudentDto;
-import com.boubyan.api.exception.StudentNotFoundException;
 import com.boubyan.api.model.Student;
 import com.boubyan.api.model.User;
 import jakarta.transaction.Transactional;
@@ -14,21 +13,21 @@ import java.util.List;
 @Service
 public class StudentService {
 
-    private final StudentRepository studentRepository;
+    private final StudentDao studentDao;
     private final UserService userService;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository, UserService userService) {
-        this.studentRepository = studentRepository;
+    public StudentService(StudentDao studentDao, UserService userService) {
+        this.studentDao = studentDao;
         this.userService = userService;
     }
 
     public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+        return studentDao.findAll();
     }
 
     public Student findStudentById(Long studentId) {
-        return studentRepository.findById(studentId)
+        return studentDao.findById(studentId)
                 .orElse(null);
     }
 
@@ -43,7 +42,7 @@ public class StudentService {
 
         // Create and save Student entity
         Student student = studentDto.getStudent(user.getUserId());
-        return studentRepository.save(student);
+        return studentDao.save(student);
     }
 
     public Student updateStudent(Long id, StudentDto studentDetails) {
@@ -51,21 +50,21 @@ public class StudentService {
         if (student != null) {
             student.setFirstName(studentDetails.getFirstName());
             student.setLastName(studentDetails.getLastName());
-            return studentRepository.save(student);
+            return studentDao.save(student);
         }
         return null; // Optionally throw HTTP 404 exception
     }
 
     public Student getStudentByUserId(Long userId) {
-        return studentRepository.findByUserId(userId)
+        return studentDao.findByUserId(userId)
                 .orElse(null);
     }
 
     public List<Student> findRegisteredStudentsByCourseId(Long courseId) {
-        return studentRepository.findRegisteredStudentsByCourseId(courseId);
+        return studentDao.findRegisteredStudentsByCourseId(courseId);
     }
 
     public void deleteStudent(Long id) {
-        studentRepository.deleteById(id);
+        studentDao.deleteById(id);
     }
 }

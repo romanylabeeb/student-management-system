@@ -1,13 +1,10 @@
 package com.boubyan.api.dto;
 
-import com.boubyan.api.dao.StudentRepository;
 import com.boubyan.api.model.Course;
-import com.boubyan.api.model.CourseRegistration;
 import com.boubyan.api.model.Student;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Set;
 
 
 @Data

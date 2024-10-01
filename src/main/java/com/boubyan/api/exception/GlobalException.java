@@ -1,11 +1,9 @@
 package com.boubyan.api.exception;
 
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.boubyan.api.controller.GlobalExceptionHandler;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -15,7 +13,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-//@ControllerAdvice
+@ControllerAdvice
 public class GlobalException {
 
     @ExceptionHandler(CustomException.class)
@@ -42,10 +40,7 @@ public class GlobalException {
         return buildResponseEntity(HttpStatus.BAD_REQUEST, "Missing required fields or invalid values.");
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
-        return buildResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
-    }
+
 
     private ResponseEntity<ErrorResponse> buildResponseEntity(HttpStatus status, String message) {
         return ResponseEntity.status(status)

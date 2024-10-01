@@ -31,7 +31,7 @@ public class CourseRegistration {
 
     public CourseRegistration() {
     }
-    public CourseRegistration(Student student, Course course) {
+    public CourseRegistration( Course course,Student student) {
         this.student = student;
         this.course = course;
         this.id = new CourseRegistrationId(course.getCourseId(), student.getStudentId());

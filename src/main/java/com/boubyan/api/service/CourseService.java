@@ -1,9 +1,14 @@
 package com.boubyan.api.service;
 
-import com.boubyan.api.dao.CourseRepository;
+import com.boubyan.api.dao.CourseDao;
+import com.boubyan.api.dao.CourseRegistrationDao;
 import com.boubyan.api.dto.CourseDetailsDto;
 import com.boubyan.api.dto.CourseDto;
+import com.boubyan.api.exception.CourseException;
+import com.boubyan.api.exception.CustomException;
+import com.boubyan.api.exception.StudentException;
 import com.boubyan.api.model.Course;
+import com.boubyan.api.model.CourseRegistration;
 import com.boubyan.api.model.Student;
 import com.boubyan.api.pdf.PdfUtils;
 import com.itextpdf.text.DocumentException;
@@ -15,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,25 +27,28 @@ import java.util.List;
 @Service
 public class CourseService {
 
-    private final CourseRepository courseRepository;
+    private final CourseDao courseDao;
+    private final CourseRegistrationDao courseRegistrationDao;
     private final StudentService studentService;
 
     @Autowired
-    public CourseService(CourseRepository courseRepository, StudentService studentService) {
-        this.courseRepository = courseRepository;
+    public CourseService(CourseDao courseDao, CourseRegistrationDao courseRegistrationDao, StudentService studentService) {
+        this.courseDao = courseDao;
+        this.courseRegistrationDao = courseRegistrationDao;
         this.studentService = studentService;
     }
 
+
     public Course createCourse(CourseDto courseDto) {
-        return courseRepository.save(courseDto.getCourse());
+        return courseDao.save(courseDto.getCourse());
     }
 
     public List<Course> getAllCourses() {
-        return courseRepository.findAll();
+        return courseDao.findAll();
     }
 
     public Course findCourseById(Long courseId) {
-        return courseRepository.findById(courseId)
+        return courseDao.findById(courseId)
                 .orElse(null);
     }
 
@@ -59,16 +66,49 @@ public class CourseService {
         if (course != null) {
             course.setCourseName(courseDto.getCourseName());
             course.setDescription(courseDto.getDescription());
-            return courseRepository.save(course);
+            return courseDao.save(course);
         }
         return null; // throw HTTP 404 exception if needed
     }
 
-    public void deleteCourse(Long id) {
-        courseRepository.deleteById(id);
+    public CourseRegistration assignStudentToCourse(Long courseId, Long studentId) throws Exception {
+        // Check if the student is already registered in the course
+        CourseRegistration registration = buildCourseRegistrationByCourseIdAndStudentId(courseId, studentId);
+        if (courseRegistrationDao.existsById(registration.getId())) {
+            throw new CustomException("The student already registered to this course"); // Student already registered in this course
+        }
+        // Register the student
+        return courseRegistrationDao.save(registration);
     }
 
-    public ResponseEntity<byte[]> exportPdf(Long courseId) throws  DocumentException {
+    public boolean removeStudentFromCourse(Long courseId, Long studentId) throws Exception {
+        // Check if the student is already registered in the course
+        CourseRegistration registration = buildCourseRegistrationByCourseIdAndStudentId(courseId, studentId);
+        if (!courseRegistrationDao.existsById(registration.getId())) {
+            throw new CustomException("The student isn't registered to that course");
+        }
+
+        courseRegistrationDao.deleteById(registration.getId());
+        return true; // No registration found to delete
+    }
+
+    private CourseRegistration buildCourseRegistrationByCourseIdAndStudentId(long courseId, long studentId) throws Exception {
+        Course course = courseDao.findById(courseId)
+                .orElseThrow(() -> new CourseException("Course not found"));
+        Student student = studentService.findStudentById(studentId);
+
+        if (student == null) {
+            throw new StudentException("Student not found");
+        }
+        return new CourseRegistration(course, student);
+    }
+
+
+    public void deleteCourse(Long id) {
+        courseDao.deleteById(id);
+    }
+
+    public ResponseEntity<byte[]> exportPdf(Long courseId) throws DocumentException {
         Course course = findCourseById(courseId);
         if (course == null) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
@@ -104,7 +144,6 @@ public class CourseService {
             studentData.add(String.valueOf(student.getStudentId())); // Convert ID to String
             studentData.add(student.getFirstName());
             studentData.add(student.getLastName());
-            // Add more properties as needed
 
             result.add(studentData);
         }

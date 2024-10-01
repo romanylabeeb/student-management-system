@@ -5,10 +5,9 @@ import org.springframework.stereotype.Repository;
 import com.boubyan.api.model.User;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserDao extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String email);
 
 }

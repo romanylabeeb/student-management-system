@@ -8,10 +8,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.UUID;
 
 @Repository
-public interface CourseRepository extends JpaRepository<Course, Long> {
+public interface CourseDao extends JpaRepository<Course, Long> {
 
     // To find a CourseRegistration by courseId and studentId
 

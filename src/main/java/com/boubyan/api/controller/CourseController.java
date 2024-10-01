@@ -2,10 +2,10 @@ package com.boubyan.api.controller;
 
 
 import com.boubyan.api.dto.CourseDetailsDto;
+import com.boubyan.api.model.CourseRegistration;
 import com.itextpdf.text.DocumentException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -63,6 +63,21 @@ public class CourseController {
         return ResponseEntity.noContent().build();
     }
 
+    // Assign a student to a course
+    @PreAuthorize("hasAuthority('Admin')")
+    @PostMapping("/{courseId}/students/{studentId}")
+    public ResponseEntity<CourseRegistration> assignStudentToCourse(@PathVariable Long courseId, @PathVariable Long studentId) throws Exception {
+        CourseRegistration assigned = courseService.assignStudentToCourse(courseId, studentId);
+        return ResponseEntity.ok(assigned);
+    }
+
+    // Remove a student from a course
+    @PreAuthorize("hasAuthority('Admin')")
+    @DeleteMapping("/{courseId}/students/{studentId}")
+    public ResponseEntity<Void> removeStudentFromCourse(@PathVariable Long courseId, @PathVariable Long studentId) throws Exception {
+        boolean removed = courseService.removeStudentFromCourse(courseId, studentId);
+        return removed ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
 
     @PostMapping("{id}/pdf")
     public ResponseEntity<byte[]> exportPdf(@PathVariable Long id) throws IOException, DocumentException {
