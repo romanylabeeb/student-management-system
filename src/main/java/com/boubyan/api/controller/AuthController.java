@@ -21,13 +21,13 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserDto userDto) {
-      try {
-        authService.register(userDto); // Save user with hashed password
-      return  ResponseEntity.status(HttpStatus.CREATED).body("Successfully created user");
-      } catch (Exception e) {
-          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                  .body("An error occurred during registration.");
-      }
+        try {
+            authService.register(userDto); // Save user with hashed password
+            return ResponseEntity.status(HttpStatus.CREATED).body("Successfully created user");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error occurred during registration.");
+        }
     }
 
     @PostMapping("/login")

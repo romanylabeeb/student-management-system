@@ -20,5 +20,8 @@ public interface CourseRegistrationService {
 
     List<Student> getUnregisteredStudentsForCourse(Long courseId, String studentName);
 
-    ResponseEntity<byte[]> exportPdf(Long courseId) throws Exception;
+
+    ResponseEntity<byte[]> exportStudentDetailsAsPdf(Long id)throws Exception;
+
+    ResponseEntity<byte[]> exportCourseDetailsAsPdf(Long id)throws Exception;
 }

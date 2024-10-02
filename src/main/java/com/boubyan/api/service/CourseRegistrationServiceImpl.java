@@ -90,7 +90,25 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
     }
 
     @Override
-    public ResponseEntity<byte[]> exportPdf(Long courseId) throws Exception {
+    public ResponseEntity<byte[]> exportStudentDetailsAsPdf(Long id) throws Exception {
+        Student student = studentDao.findById(id)
+                .orElseThrow(() -> new StudentException("Student not found."));
+
+        List<Course> registeredCourses = findRegisteredCoursesByStudentId(id);
+        if (registeredCourses.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                    .body("No courses registered for this student.".getBytes());
+        }
+
+        // Define headers for the PDF
+        List<String> pdfColumns = Arrays.asList("ID", "Course Name", "Course Description");
+        List<List<String>> data = convertCoursesToListOfLists(registeredCourses);
+        String pdfTitle = String.format("Registered Courses for Student: %s", String.format("%s %s", student.getFirstName(), student.getLastName()));
+        return exportPdf(pdfColumns, data, pdfTitle);
+    }
+
+    @Override
+    public ResponseEntity<byte[]> exportCourseDetailsAsPdf(Long courseId) throws Exception {
         Course course = courseDao.findById(courseId)
                 .orElseThrow(() -> new CourseException("Course not found."));
 
@@ -104,8 +122,11 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
         List<String> pdfColumns = Arrays.asList("ID", "First Name", "Last Name");
         List<List<String>> data = convertStudentsToListOfLists(registeredStudents);
         String pdfTitle = String.format("Registered Students for Course: %s", course.getCourseName());
-        ByteArrayOutputStream pdfStream = PdfUtils.generatePdfStream(pdfTitle, pdfColumns, data);
+        return exportPdf(pdfColumns, data, pdfTitle);
+    }
 
+    private ResponseEntity<byte[]> exportPdf(List<String> pdfColumns, List<List<String>> data, String pdfTitle) throws Exception {
+        ByteArrayOutputStream pdfStream = PdfUtils.generatePdfStream(pdfTitle, pdfColumns, data);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=registered_students.pdf");
@@ -120,6 +141,18 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
                     String.valueOf(student.getStudentId()),
                     student.getFirstName(),
                     student.getLastName()
+            ));
+        }
+        return result;
+    }
+
+    private List<List<String>> convertCoursesToListOfLists(List<Course> registeredCourses) {
+        List<List<String>> result = new ArrayList<>();
+        for (Course course : registeredCourses) {
+            result.add(Arrays.asList(
+                    String.valueOf(course.getCourseId()),
+                    course.getCourseName(),
+                    course.getDescription()
             ));
         }
         return result;

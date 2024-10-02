@@ -1,6 +1,5 @@
 package com.boubyan.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -10,9 +9,7 @@ import jakarta.persistence.*;
 
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+
 
 @Data
 @NoArgsConstructor
@@ -24,8 +21,9 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long studentId;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    // adding student as user
+//    @Column(name = "user_id", nullable = false)
+//    private Long userId;
 
     @NotBlank(message = "First name is mandatory")
     private String firstName;
@@ -39,10 +37,19 @@ public class Student {
     private String email;
 
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt ;
 
     @Column(name = "updated_at")
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    private LocalDateTime updatedAt ;
 
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now(); // Optional: Set on creation
+    }
 
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now(); // Update on modification
+    }
 }

@@ -1,7 +1,6 @@
 package com.boubyan.api.dto;
 
 import com.boubyan.api.model.User;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 

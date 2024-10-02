@@ -1,6 +1,7 @@
 package com.boubyan.api.service;
 
-import com.boubyan.api.dto.StudentDto;
+import com.boubyan.api.dto.StudentCreateDto;
+import com.boubyan.api.dto.StudentUpdateDto;
 import com.boubyan.api.exception.StudentException;
 import com.boubyan.api.model.Student;
 
@@ -10,15 +11,13 @@ public interface StudentService {
 
     List<Student> getAllStudents();
 
-    Student findStudentById(Long studentId) throws StudentException;
+    Student getStudentById(Long studentId) throws StudentException;
 
-    Student createStudent(StudentDto studentDto);
+    Student createStudent(StudentCreateDto studentDto);
 
-    Student updateStudent(Long id, StudentDto studentDetails) throws StudentException;
-
-    Student getStudentByUserId(Long userId);
+    Student updateStudent(Long id, StudentUpdateDto studentDetails) throws StudentException;
+    void deleteStudent(Long id) throws StudentException;
 
     List<Student> findRegisteredStudentsByCourseId(Long courseId);
 
-    void deleteStudent(Long id);
 }

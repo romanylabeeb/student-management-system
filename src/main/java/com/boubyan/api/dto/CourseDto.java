@@ -12,10 +12,4 @@ public class CourseDto {
 
     private String description;
 
-    public Course getCourse() {
-        Course course = new Course();
-        course.setCourseName(courseName);
-        course.setDescription(description);
-        return course;
-    }
 }

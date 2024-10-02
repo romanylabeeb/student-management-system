@@ -3,6 +3,7 @@ package com.boubyan.api.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -20,16 +21,19 @@ import com.boubyan.api.service.UserService;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
-public class SecurityConfig  {
+public class SecurityConfig {
 
-    @Autowired
-    private JwtRequestFilter jwtFilter;
-    @Autowired
-    private UserService userService;
+    private final JwtRequestFilter jwtFilter;
+    private final UserService userService;
+
+    public SecurityConfig(JwtRequestFilter jwtFilter, UserService userService) {
+        this.jwtFilter = jwtFilter;
+        this.userService = userService;
+    }
 
     @Bean
     public AuthenticationProvider authProvider() {
-        DaoAuthenticationProvider provider=new DaoAuthenticationProvider();
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(userService);
         provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
         return provider;
@@ -41,14 +45,16 @@ public class SecurityConfig  {
                 .cors(cors -> cors.disable()) // Add this line to disable CORS
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/swagger-ui/**","/v3/api-docs/**","/api/auth/register", "/api/auth/login")
-                        .permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS).permitAll()  // Allow OPTIONS requests without authentication
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()  // Allow swagger requests without authentication
+                        .requestMatchers("/api/auth/register", "/api/auth/login").permitAll()  // Allow login and register
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

@@ -12,7 +12,7 @@ public interface CourseService {
 
     List<Course> getAllCourses();
 
-    Course findCourseById(Long courseId) throws CourseException;
+    Course getCourseById(Long courseId) throws CourseException;
 
     Course updateCourse(Long courseId, CourseDto courseDto) throws CourseException;
 
