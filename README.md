@@ -19,7 +19,9 @@
     - Validate all incoming requests for proper data.
 5. Security
     - JWT-based authentication and Spring Security to secure all endpoints.
-6. API Documentation
+6. Spring Cache
+   - Cache frequently accessed data.
+7. API Documentation
     - Swagger UI for API exploration and testing.
 ## Database Design
 - The system uses a relational database to store details of users, students, courses, and course registrations.
@@ -109,7 +111,7 @@ The application uses Spring Security and JWT for secure authentication and autho
 ## Setup Instructions
 
 1. ## Clone the repository:
-    - `git clone https://github.com/your-repository/student-management-system.git`
+    - `git clone https://github.com/romanylabeeb/student-management-system.git`
     
 2. ## Install dependencies:
     - `mvn clean install`

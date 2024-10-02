@@ -12,6 +12,7 @@ public class StudentDetailsDto {
     private Long studentId;
     private String firstName;
     private String lastName;
+    private String email;
     private List<Course> registeredCourses;
 
     public StudentDetailsDto() {
@@ -21,6 +22,7 @@ public class StudentDetailsDto {
         this.studentId = student.getStudentId();
         this.firstName = student.getFirstName();
         this.lastName = student.getLastName();
+        this.email=student.getEmail();
         this.registeredCourses = registeredCourses;
 
     }

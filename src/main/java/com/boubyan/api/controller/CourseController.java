@@ -79,7 +79,7 @@ public class CourseController {
     }
 
     // Export course details and students as PDF
-    @PostMapping("{id}/pdf")
+    @GetMapping("{id}/pdf")
     public ResponseEntity<byte[]> exportCourseDetailsAsPdf(@PathVariable Long id) throws Exception {
         return courseRegistrationService.exportCourseDetailsAsPdf(id);
     }

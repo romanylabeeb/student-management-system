@@ -129,7 +129,7 @@ public class CourseRegistrationServiceImpl implements CourseRegistrationService 
         ByteArrayOutputStream pdfStream = PdfUtils.generatePdfStream(pdfTitle, pdfColumns, data);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=registered_students.pdf");
+        headers.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=sm_file.pdf");
         headers.setContentLength(pdfStream.size());
         return new ResponseEntity<>(pdfStream.toByteArray(), headers, HttpStatus.OK);
     }
