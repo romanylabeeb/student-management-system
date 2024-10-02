@@ -38,10 +38,10 @@ public class SecurityConfig  {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-//                .cors(customizer -> customizer.) // Add this line to enable CORS
+                .cors(cors -> cors.disable()) // Add this line to disable CORS
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/auth/register", "/api/auth/login")
+                        .requestMatchers("/swagger-ui/**","/v3/api-docs/**","/api/auth/register", "/api/auth/login")
                         .permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
