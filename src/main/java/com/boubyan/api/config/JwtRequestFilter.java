@@ -1,7 +1,6 @@
-package com.boubyan.api.configuration;
+package com.boubyan.api.config;
 
 
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

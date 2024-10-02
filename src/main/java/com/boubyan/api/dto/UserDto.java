@@ -16,7 +16,7 @@ public class UserDto {
 
     private String role;
 
-    public User getUser(){
+    public User buildUser(){
         User user = new User();
         user.setPassword(password);
         user.setUsername(username);

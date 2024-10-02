@@ -33,6 +33,6 @@ public class UserService implements UserDetailsService {
 
     public User saveUser(UserDto userDto) {
         userDto.setPassword(encoder.encode(userDto.getPassword()));
-        return userDao.save(userDto.getUser());
+        return userDao.save(userDto.buildUser());
     }
 }
