@@ -30,7 +30,7 @@
 - Spring Boot 3.4, Spring Security
 - iText for generating PDFs
 - PostgreSQL for development database
-- Oracle DB for production database
+- Oracle for test database
 - Spring Cache for caching frequently accessed data
 
 ## API Endpoints
@@ -89,6 +89,7 @@ The application uses Spring Security and JWT for secure authentication and autho
 2. ## Install dependencies:
     - `mvn clean install`
 3. ## Set up your database (PostgreSQL or Oracle).
+    
     - Configure your database in application.properties:
         - properties
             `spring.datasource.url=jdbc:postgresql://localhost:5432/student_management
