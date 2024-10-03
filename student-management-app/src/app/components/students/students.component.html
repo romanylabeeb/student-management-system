@@ -1,0 +1,12 @@
+<mat-card>
+  <h2>Students</h2>
+
+  <div *ngIf="showAddEditForm" class="add-editform">
+    <app-add-edit-student [student]="selectedStudent" [isEditMode]="isEditMode"
+      (studentEventAction)="handleAddEditStudent($event)">
+    </app-add-edit-student>
+  </div>
+  <button mat-raised-button color="primary" (click)="addNewStudent()">Add New Student</button>
+
+  <app-student-table [students]="students" [showEdit]="true" (onEdit)="editStudent($event)"></app-student-table>
+</mat-card>

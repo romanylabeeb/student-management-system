@@ -1,0 +1,38 @@
+<table mat-table [dataSource]="students">
+  <ng-container matColumnDef="firstName">
+    <th mat-header-cell *matHeaderCellDef> First Name </th>
+    <td mat-cell *matCellDef="let student" (click)="viewStudentDetails(student.studentId)">
+      {{ student.firstName }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="lastName">
+    <th mat-header-cell *matHeaderCellDef> Last Name </th>
+    <td mat-cell *matCellDef="let student" (click)="viewStudentDetails(student.studentId)">
+      {{ student.lastName }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef> Email </th>
+    <td mat-cell *matCellDef="let student" (click)="viewStudentDetails(student.studentId)">
+      {{ student.email }}
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions" *ngIf="showEdit">
+    <th mat-header-cell *matHeaderCellDef> Actions </th>
+    <td mat-cell *matCellDef="let student">
+      <button mat-button (click)="onEditStudent(student)">Edit</button>
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="actions" *ngIf="showDisenroll">
+    <th mat-header-cell *matHeaderCellDef> Actions </th>
+    <td mat-cell *matCellDef="let student">
+      <button mat-button (click)="onDisenrollStudent(student)">Disenroll Student</button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnNames"></tr>
+  <tr mat-row *matRowDef="let row; columns: columnNames"></tr>
+</table>

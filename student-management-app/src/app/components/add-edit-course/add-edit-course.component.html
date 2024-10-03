@@ -1,0 +1,21 @@
+<div class="add-edit-course-form">
+  <form (ngSubmit)="onSubmit()" #studentForm="ngForm">
+    <mat-form-field appearance="fill">
+      <mat-label>Course Name</mat-label>
+      <input matInput placeholder="Course Name" name="courseName" [(ngModel)]="course.courseName" required>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Description</mat-label>
+      <input matInput placeholder="Description" name="description" [(ngModel)]="course.description" required>
+    </mat-form-field>
+
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="studentForm.invalid">
+      {{ isEditMode ? 'Update Course' : 'Add Course' }}
+    </button>
+    <button mat-raised-button color="secondary" (click)="onCancel()">
+      Cancel
+    </button>
+  </form>
+</div>

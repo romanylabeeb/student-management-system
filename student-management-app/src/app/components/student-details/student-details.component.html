@@ -1,0 +1,23 @@
+<div *ngIf="student">
+    <h2>Student Details</h2>
+    <p><strong>First Name:</strong> {{ student.firstName }}</p>
+    <p><strong>Last Name:</strong> {{ student.lastName }}</p>
+    <p><strong>Email:</strong> {{ student.email }}</p>
+
+    <button mat-button (click)="goBack()">Go Back</button>
+    <button mat-button (click)="onShowEnroll()">Enroll in another course</button>
+
+    <div *ngIf="showEnroll">
+        <app-register-course [studentId]="studentId" (onEnroll)="onEnrollAction($event)"
+            (onCancelEnroll)="hideEnroll()"></app-register-course>
+    </div>
+    <div *ngIf="courses.length>0">
+        <button mat-button (click)="download()">Export Details</button>
+
+        <app-course-table [courses]="courses" [showEdit]="false" [showDisenroll]="true"
+            (onDisenroll)="onDisenrollCourseAction($event)"></app-course-table>
+    </div>
+</div>
+<div *ngIf="!student">
+    <p>Loading student details...</p>
+</div>

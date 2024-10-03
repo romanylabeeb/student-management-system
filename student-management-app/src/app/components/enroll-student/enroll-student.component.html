@@ -1,0 +1,26 @@
+<div class="register-course-container">
+    <h2>Enroll Student</h2>
+
+
+    <mat-form-field>
+        <mat-label>Search Student by firstName and lastName</mat-label>
+        <input matInput [(ngModel)]="studentName" placeholder="Enter Student firstName or lastName Name">
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="searchStudents()">Search</button>
+    <button mat-raised-button color="secondary" (click)="cancel()"> Cancel</button>
+
+    <div *ngIf="unregisteredStudents.length > 0">
+        <h3>Unregistered Students</h3>
+        <mat-list>
+            <mat-list-item *ngFor="let student of unregisteredStudents">
+                <span>{{ student.firstName }} {{ student.lastName }}</span>
+                <button mat-raised-button color="accent" (click)="registerStudent(student.studentId)">Register</button>
+            </mat-list-item>
+        </mat-list>
+    </div>
+
+    <div *ngIf="unregisteredStudents?.length === 0 && searched">
+        <p>No unregistered students found for this course.</p>
+    </div>
+</div>
