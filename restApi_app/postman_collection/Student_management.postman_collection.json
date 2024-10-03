@@ -477,7 +477,10 @@
 					"response": []
 				},
 				{
-					"name": "export student details as pdf Copy",
+					"name": "export student details as pdf",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -485,7 +488,7 @@
 								"token": "{{token}}"
 							}
 						},
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -496,7 +499,7 @@
 								}
 							}
 						},
-						"url": "{{base_url}}/{{api_prefix}}/students/1/pdf"
+						"url": "{{base_url}}/{{api_prefix}}/students/8/pdf"
 					},
 					"response": []
 				}
@@ -549,7 +552,7 @@
 								}
 							}
 						},
-						"url": "{{base_url}}/{{api_prefix}}/courses/1/students/4"
+						"url": "{{base_url}}/{{api_prefix}}/courses/4/students/8"
 					},
 					"response": []
 				},
