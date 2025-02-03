@@ -1,0 +1,21 @@
+pipeline {
+    agent any
+    stages {
+        // clean prev build 
+        stage("Clean Up"){
+            steps {
+                deleteDir() // delete all dir recursive
+            }
+        }
+    stage ("Build"){
+        steps{
+            dir("student-management-system/restApi_app"){
+                sh "mvn clean package -DskipTests"
+            }
+        }
+    }
+
+
+    }
+
+}
